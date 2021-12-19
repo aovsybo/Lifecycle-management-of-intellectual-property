@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OOPASU.Domain;
 using OOPASU.Domain.DTO;
-using OOPASU.Infrastructure;
+using OOPASU.Infrastructure.Data;
 using OOPASU.Infrastructure.Repository;
 
 namespace OOPASU.API.Controllers
@@ -43,7 +43,13 @@ namespace OOPASU.API.Controllers
                 return NotFound();
             }
 
-            return keyWord;
+            KeyWordOutDTO dto = new KeyWordOutDTO()
+            {
+                Id = keyWord.Id,
+                Word = keyWord.Word
+
+            };
+            return dto;
         }
 
         // PUT: api/KeyWords/5
@@ -83,10 +89,15 @@ namespace OOPASU.API.Controllers
         // POST: api/KeyWords
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<KeyWordOutDTO>> PostKeyWord(KeyWordDTO keyWord)
+        public async Task<ActionResult<KeyWordOutDTO>> PostKeyWord(KeyWordDTO keyWordDTO)
         {
             //_context.KeyWords.Add(keyWord);
             //await _context.SaveChangesAsync();
+            var keyWord = new KeyWord()
+            {
+                Word = keyWordDTO.Word
+
+            };
             Guid id = await _keyWordRepository.AddAsync(keyWord);
             return CreatedAtAction("GetKeyWord", new { id = id }, keyWord);
         }

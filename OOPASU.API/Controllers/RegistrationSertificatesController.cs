@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OOPASU.Domain;
 using OOPASU.Domain.DTO;
-using OOPASU.Infrastructure;
+using OOPASU.Infrastructure.Data;
 using OOPASU.Infrastructure.Repository;
 
 namespace OOPASU.API.Controllers
@@ -34,7 +34,7 @@ namespace OOPASU.API.Controllers
 
         // GET: api/RegistrationSertificates/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<RegistrationSertificateOutDTO>> GetRegistrationSertificate(Guid id)
+        public async Task<ActionResult<RegistrationSertificate>> GetRegistrationSertificate(Guid id)
         {
             //var registrationSertificate = await _context.RegistrationSertificates.FindAsync(id);
             var registrationSertificate = await _registrationSertificateRepository.GetByIdAsync(id);
@@ -42,6 +42,16 @@ namespace OOPASU.API.Controllers
             {
                 return NotFound();
             }
+
+            RegistrationSertificateOutDTO dto = new RegistrationSertificateOutDTO()
+            {
+                Id = registrationSertificate.Id,
+                ProductType = registrationSertificate.ProductType,
+                ProductName = registrationSertificate.ProductName,
+                Number = registrationSertificate.Number,
+                RegistrationDate = registrationSertificate.RegistrationDate,
+                RightHolder = registrationSertificate.RightHolder
+            };
 
             return registrationSertificate;
         }
@@ -83,10 +93,20 @@ namespace OOPASU.API.Controllers
         // POST: api/RegistrationSertificates
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<RegistrationSertificateOutDTO>> PostRegistrationSertificate(RegistrationSertificateDTO registrationSertificate)
+        public async Task<ActionResult<RegistrationSertificateOutDTO>> PostRegistrationSertificate(RegistrationSertificateDTO registrationSertificateDTO)
         {
             //_context.RegistrationSertificates.Add(registrationSertificate);
             //await _context.SaveChangesAsync();
+
+            var registrationSertificate = new RegistrationSertificate()
+            {
+                ProductType = registrationSertificateDTO.ProductType,
+                ProductName = registrationSertificateDTO.ProductName,
+                Number = registrationSertificateDTO.Number,
+                RegistrationDate = registrationSertificateDTO.RegistrationDate,
+                RightHolder = registrationSertificateDTO.RightHolder
+            };
+
             Guid id = await _registrationSertificateRepository.AddAsync(registrationSertificate);
             return CreatedAtAction("GetRegistrationSertificate", new { id = id }, registrationSertificate);
         }

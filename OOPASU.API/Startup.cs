@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
+using OOPASU.Infrastructure.Data;
 
 namespace OOPASU.API
 {
@@ -31,7 +32,7 @@ namespace OOPASU.API
 
             services.AddControllers();
 
-            services.AddDbContext<OOPASU.Infrastructure.Context>(options =>
+            services.AddDbContext<Context>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("OOPASU")));
 
             services.AddSwaggerGen(c =>

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using OOPASU.Domain;
 using OOPASU.Domain.DTO;
+using OOPASU.Infrastructure.Data;
 
 namespace OOPASU.Infrastructure.Repository
 {
@@ -20,33 +21,18 @@ namespace OOPASU.Infrastructure.Repository
         {
             return await _context.RegistrationSertificates.ToListAsync();
         }
-        public async Task<Guid> AddAsync(RegistrationSertificateDTO registrationSertificateDTO)
+        public async Task<Guid> AddAsync(RegistrationSertificate registrationSertificate)
         {
-            var registrationSertificate = new RegistrationSertificate()
-            {
-                ProductType = registrationSertificateDTO.ProductType,
-                ProductName = registrationSertificateDTO.ProductName,
-                Number = registrationSertificateDTO.Number,
-                RegistrationDate = registrationSertificateDTO.RegistrationDate,
-                RightHolder = registrationSertificateDTO.RightHolder
-            };
+            
             _context.RegistrationSertificates.Add(registrationSertificate);
             await _context.SaveChangesAsync();
             return registrationSertificate.Id;
         }
-        public async Task<RegistrationSertificateOutDTO> GetByIdAsync(Guid id)
+        public async Task<RegistrationSertificate> GetByIdAsync(Guid id)
         {
             RegistrationSertificate registrationSertificate = await _context.RegistrationSertificates.FindAsync(id);
-            RegistrationSertificateOutDTO dto = new RegistrationSertificateOutDTO()
-            {
-                Id = registrationSertificate.Id,
-                ProductType = registrationSertificate.ProductType,
-                ProductName = registrationSertificate.ProductName,
-                Number = registrationSertificate.Number,
-                RegistrationDate = registrationSertificate.RegistrationDate,
-                RightHolder = registrationSertificate.RightHolder 
-            };
-            return dto;
+            
+            return registrationSertificate;
         }
         public async Task UpdateAsync(RegistrationSertificateOutDTO registrationSertificate)
         {

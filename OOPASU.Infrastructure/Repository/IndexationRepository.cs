@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using OOPASU.Domain;
 using OOPASU.Domain.DTO;
+using OOPASU.Infrastructure.Data;
 
 namespace OOPASU.Infrastructure.Repository
 {
@@ -20,27 +21,18 @@ namespace OOPASU.Infrastructure.Repository
         {
             return await _context.Indexations.ToListAsync();
         }
-        public async Task<Guid> AddAsync(IndexationDTO indexationDTO)
+        public async Task<Guid> AddAsync(Indexation indexation)
         {
-            var indexation = new Indexation()
-            {
-                Type = indexationDTO.Type,
-                Link = indexationDTO.Link
-            };
+            
             _context.Indexations.Add(indexation);
             await _context.SaveChangesAsync();
             return indexation.Id;
         }
-        public async Task<IndexationOutDTO> GetByIdAsync(Guid id)
+        public async Task<Indexation> GetByIdAsync(Guid id)
         {
             Indexation indexation = await _context.Indexations.FindAsync(id);
-            IndexationOutDTO dto = new IndexationOutDTO()
-            {
-                Id = indexation.Id,
-                Type = indexation.Type,
-                Link = indexation.Link
-            };
-            return dto;
+            
+            return indexation;
         }
         public async Task UpdateAsync(IndexationOutDTO indexation)
         {

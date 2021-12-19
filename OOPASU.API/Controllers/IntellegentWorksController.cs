@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OOPASU.Domain;
 using OOPASU.Domain.DTO;
-using OOPASU.Infrastructure;
+using OOPASU.Infrastructure.Data;
 using OOPASU.Infrastructure.Repository;
 
 namespace OOPASU.API.Controllers
@@ -43,7 +43,20 @@ namespace OOPASU.API.Controllers
                 return NotFound();
             }
 
-            return intellegentWork;
+            IntellegentWorkOutDTO dto = new IntellegentWorkOutDTO()
+            {
+                Id = intellegentWork.Id,
+                Title = intellegentWork.Title,
+                Category = intellegentWork.Category,
+                Description = intellegentWork.Description,
+                GRNTI = intellegentWork.GRNTI,
+                DOI = intellegentWork.DOI,
+                Place = intellegentWork.Place,
+                Year = intellegentWork.Year,
+                Status = intellegentWork.Status
+            };
+
+            return dto;
         }
 
         // PUT: api/IntellegentWorks/5
@@ -83,10 +96,24 @@ namespace OOPASU.API.Controllers
         // POST: api/IntellegentWorks
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<IntellegentWorkOutDTO>> PostIntellegentWork(IntellegentWorkDTO intellegentWork)
+        public async Task<ActionResult<IntellegentWorkOutDTO>> PostIntellegentWork(IntellegentWorkDTO intellegentWorkDTO)
         {
             //_context.IntellegentWorks.Add(intellegentWork);
             //await _context.SaveChangesAsync();
+
+            var intellegentWork = new IntellegentWork()
+            {
+
+                Title = intellegentWorkDTO.Title,
+                Category = intellegentWorkDTO.Category,
+                Description = intellegentWorkDTO.Description,
+                GRNTI = intellegentWorkDTO.GRNTI,
+                DOI = intellegentWorkDTO.DOI,
+                Place = intellegentWorkDTO.Place,
+                Year = intellegentWorkDTO.Year,
+                Status = intellegentWorkDTO.Status
+            };
+
             Guid id = await _intellegentWorkRepository.AddAsync(intellegentWork);
             return CreatedAtAction("GetIntellegentWork", new { id = id }, intellegentWork);
         }

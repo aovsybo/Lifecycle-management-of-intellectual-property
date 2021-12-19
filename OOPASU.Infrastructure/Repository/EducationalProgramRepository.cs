@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using OOPASU.Domain;
 using OOPASU.Domain.DTO;
+using OOPASU.Infrastructure.Data;
 
 namespace OOPASU.Infrastructure.Repository
 {
@@ -20,26 +21,17 @@ namespace OOPASU.Infrastructure.Repository
         {
             return await _context.EducationalPrograms.ToListAsync();
         }
-        public async Task<Guid> AddAsync(EducationalProgramDTO educationalProgramDTO)
+        public async Task<Guid> AddAsync(EducationalProgram educationalProgram)
         {
-            var educationalProgram = new EducationalProgram()
-            {
-                EdProgramName = educationalProgramDTO.EdProgramName
-            };
             _context.EducationalPrograms.Add(educationalProgram);
             await _context.SaveChangesAsync();
             return educationalProgram.Id;
         }
-        public async Task<EducationalProgramOutDTO> GetByIdAsync(Guid id)
+        public async Task<EducationalProgram> GetByIdAsync(Guid id)
         {
             EducationalProgram educationalProgram = await _context.EducationalPrograms.FindAsync(id);
-            EducationalProgramOutDTO dto = new EducationalProgramOutDTO()
-            {
-                Id = educationalProgram.Id,
-                EdProgramName = educationalProgram.EdProgramName
- 
-            };
-            return dto;
+            
+            return educationalProgram;
         }
         public async Task UpdateAsync(EducationalProgramOutDTO educationalProgram)
         {

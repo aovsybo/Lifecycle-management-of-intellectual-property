@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OOPASU.Domain;
 using OOPASU.Domain.DTO;
-using OOPASU.Infrastructure;
+using OOPASU.Infrastructure.Data;
 using OOPASU.Infrastructure.Repository;
 
 namespace OOPASU.API.Controllers
@@ -43,7 +43,14 @@ namespace OOPASU.API.Controllers
                 return NotFound();
             }
 
-            return book;
+            BookOutDTO dto = new BookOutDTO()
+            {
+                Id = book.Id,
+                Organisation = book.Organisation,
+                Level = book.Level,
+
+            };
+            return dto;
         }
 
         // PUT: api/Books/5
@@ -83,10 +90,15 @@ namespace OOPASU.API.Controllers
         // POST: api/Books
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<BookOutDTO>> PostBook(BookDTO book)
+        public async Task<ActionResult<BookOutDTO>> PostBook(BookDTO bookDTO)
         {
             //_context.Books.Add(book);
             //await _context.SaveChangesAsync();
+            var book = new Book()
+            {
+                Organisation = bookDTO.Organisation,
+                Level = bookDTO.Level,
+            };
             Guid id = await _bookRepository.AddAsync(book);
             return CreatedAtAction("GetBook", new { id = id }, book);
         }

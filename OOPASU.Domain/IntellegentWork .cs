@@ -19,9 +19,9 @@ namespace OOPASU.Domain
         public string Status { get; set; }
 
         //Свойства навигации
-        public List<Author> Authors { get; set; }
-        public List<KeyWord> KeyWords { get; set; }
-        public List<Indexation> Indexations { get; set; }
+        public List<Author> Authors { get; set; } = new List<Author>();
+        public List<KeyWord> KeyWords { get; set; } = new List<KeyWord>();
+        public List<Indexation> Indexations { get; set; } = new List<Indexation>();
 
     }
 }

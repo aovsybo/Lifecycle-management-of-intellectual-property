@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using OOPASU.Domain;
 using OOPASU.Domain.DTO;
+using OOPASU.Infrastructure.Data;
 
 namespace OOPASU.Infrastructure.Repository
 {
@@ -20,31 +21,18 @@ namespace OOPASU.Infrastructure.Repository
         {
             return await _context.Publications.ToListAsync();
         }
-        public async Task<Guid> AddAsync(PublicationDTO publicationDTO)
+        public async Task<Guid> AddAsync(Publication publication)
         {
-            var publication = new Publication()
-            {
-                Publisher = publicationDTO.Publisher,
-                UDK = publicationDTO.UDK,
-                Editor = publicationDTO.Editor,
-                PageNumber = publicationDTO.PageNumber
-            };
+            
             _context.Publications.Add(publication);
             await _context.SaveChangesAsync();
             return publication.Id;
         }
-        public async Task<PublicationOutDTO> GetByIdAsync(Guid id)
+        public async Task<Publication> GetByIdAsync(Guid id)
         {
             Publication publication = await _context.Publications.FindAsync(id);
-            PublicationOutDTO dto = new PublicationOutDTO()
-            {
-                Id = publication.Id,
-                Publisher = publication.Publisher,
-                UDK = publication.UDK,
-                Editor = publication.Editor,
-                PageNumber = publication.PageNumber
-            };
-            return dto;
+            
+            return publication;
         }
         public async Task UpdateAsync(PublicationOutDTO publication)
         {

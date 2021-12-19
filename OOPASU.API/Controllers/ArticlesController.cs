@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OOPASU.Domain;
 using OOPASU.Domain.DTO;
-using OOPASU.Infrastructure;
+using OOPASU.Infrastructure.Data;
 using OOPASU.Infrastructure.Repository;
 
 namespace OOPASU.API.Controllers
@@ -43,7 +43,17 @@ namespace OOPASU.API.Controllers
                 return NotFound();
             }
 
-            return article;
+            ArticleOutDTO dto = new ArticleOutDTO()
+            {
+                Id = article.Id,
+                CollectionName = article.CollectionName,
+                CollectionNumber = article.CollectionNumber,
+                CollectionPart = article.CollectionPart,
+                FirstPage = article.FirstPage,
+                LastPage = article.LastPage
+            };
+
+            return dto;
         }
 
         // PUT: api/Articles/5
@@ -83,10 +93,20 @@ namespace OOPASU.API.Controllers
         // POST: api/Articles
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ArticleOutDTO>> PostArticle(ArticleDTO article)
+        public async Task<ActionResult<ArticleOutDTO>> PostArticle(ArticleDTO articleDTO)
         {
             //_context.Articles.Add(article);
             //await _context.SaveChangesAsync();
+
+            var article = new Article()
+            {
+                CollectionName = articleDTO.CollectionName,
+                CollectionNumber = articleDTO.CollectionNumber,
+                CollectionPart = articleDTO.CollectionPart,
+                FirstPage = articleDTO.FirstPage,
+                LastPage = articleDTO.LastPage
+            };
+
             Guid id = await _articleRepository.AddAsync(article);
             return CreatedAtAction("GetArticle", new { id = id }, article);
         }

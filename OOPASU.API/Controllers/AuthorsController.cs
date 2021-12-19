@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OOPASU.Domain;
 using OOPASU.Domain.DTO;
-using OOPASU.Infrastructure;
+using OOPASU.Infrastructure.Data;
 using OOPASU.Infrastructure.Repository;
 
 namespace OOPASU.API.Controllers
@@ -43,7 +43,15 @@ namespace OOPASU.API.Controllers
                 return NotFound();
             }
 
-            return author;
+            AuthorOutDTO dto = new AuthorOutDTO()
+            {
+                Id = author.Id,
+                UserId = author.UserId,
+                FirstName = author.FirstName,
+                SecondName = author.SecondName
+            };
+
+            return dto;
         }
 
         // PUT: api/Authors/5
@@ -83,10 +91,19 @@ namespace OOPASU.API.Controllers
         // POST: api/Authors
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<AuthorOutDTO>> PostAuthor(AuthorDTO author)
+        public async Task<ActionResult<AuthorOutDTO>> PostAuthor(AuthorDTO authorDTO)
         {
             //_context.Authors.Add(author);
             //await _context.SaveChangesAsync();
+
+            var author = new Author()
+            {
+                UserId = authorDTO.UserId,
+                FirstName = authorDTO.FirstName,
+                SecondName = authorDTO.SecondName
+
+            };
+
             Guid id = await _authorRepository.AddAsync(author);
             return CreatedAtAction("GetAuthor", new { id = id }, author);
         }

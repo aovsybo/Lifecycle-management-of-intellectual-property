@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using OOPASU.Domain;
 
-namespace OOPASU.Infrastructure
+namespace OOPASU.Infrastructure.Data
 {
     public class Context : DbContext
     {

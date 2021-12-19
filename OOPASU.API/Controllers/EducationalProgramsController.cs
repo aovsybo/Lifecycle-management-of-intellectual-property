@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OOPASU.Domain;
 using OOPASU.Domain.DTO;
-using OOPASU.Infrastructure;
+using OOPASU.Infrastructure.Data;
 using OOPASU.Infrastructure.Repository;
 
 namespace OOPASU.API.Controllers
@@ -43,7 +43,14 @@ namespace OOPASU.API.Controllers
                 return NotFound();
             }
 
-            return educationalProgram;
+            EducationalProgramOutDTO dto = new EducationalProgramOutDTO()
+            {
+                Id = educationalProgram.Id,
+                EdProgramName = educationalProgram.EdProgramName
+
+            };
+
+            return dto;
         }
 
         // PUT: api/EducationalPrograms/5
@@ -83,10 +90,16 @@ namespace OOPASU.API.Controllers
         // POST: api/EducationalPrograms
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<EducationalProgramOutDTO>> PostEducationalProgram(EducationalProgramDTO educationalProgram)
+        public async Task<ActionResult<EducationalProgramOutDTO>> PostEducationalProgram(EducationalProgramDTO educationalProgramDTO)
         {
             //_context.EducationalPrograms.Add(educationalProgram);
             //await _context.SaveChangesAsync();
+
+            var educationalProgram = new EducationalProgram()
+            {
+                EdProgramName = educationalProgramDTO.EdProgramName
+            };
+
             Guid id = await _educationalProgramRepository.AddAsync(educationalProgram);
             return CreatedAtAction("GetEducationalProgram", new { id = id }, educationalProgram);
         }

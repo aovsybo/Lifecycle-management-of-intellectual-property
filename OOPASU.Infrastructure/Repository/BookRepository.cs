@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using OOPASU.Domain;
 using OOPASU.Domain.DTO;
+using OOPASU.Infrastructure.Data;
 
 namespace OOPASU.Infrastructure.Repository
 {
@@ -20,27 +21,18 @@ namespace OOPASU.Infrastructure.Repository
         {
             return await _context.Books.ToListAsync();
         }
-        public async Task<Guid> AddAsync(BookDTO bookDTO)
+        public async Task<Guid> AddAsync(Book book)
         {
-            var book = new Book()
-            {
-                Organisation = bookDTO.Organisation,
-                Level = bookDTO.Level,
-            };
+            
             _context.Books.Add(book);
             await _context.SaveChangesAsync();
             return book.Id;
         }
-        public async Task<BookOutDTO> GetByIdAsync(Guid id)
+        public async Task<Book> GetByIdAsync(Guid id)
         {
             Book book = await _context.Books.FindAsync(id);
-            BookOutDTO dto = new BookOutDTO()
-            {
-                Id = book.Id,
-                Organisation = book.Organisation,
-                Level = book.Level,
-            };
-            return dto;
+            
+            return book;
         }
         public async Task UpdateAsync(BookOutDTO book)
         {

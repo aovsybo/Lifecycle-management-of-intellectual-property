@@ -1,0 +1,89 @@
+﻿@page "/IntellegentWorks"
+
+@using OOPASU.Domain
+@using System.Net.Http
+@using System.Net.Http.Json
+@using System.Threading.Tasks
+
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+@inject IJSRuntime js
+
+<h3>intellegentWork</h3>
+
+@if (intellegentWorks == null)
+{
+    <p><em>Empty</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>GRNTI</th>
+                <th>DOI</th>
+                <th>Place</th>
+                <th>Year</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var intellegentWork in intellegentWorks)
+            {
+                <tr>
+
+                    <td>@intellegentWork.Id</td>
+                    <td>@intellegentWork.Title</td>
+                    <td>@intellegentWork.Category</td>
+                    <td>@intellegentWork.Description</td>
+                    <td>@intellegentWork.GRNTI</td>
+                    <td>@intellegentWork.DOI</td>
+                    <td>@intellegentWork.Place</td>
+                    <td>@intellegentWork.Year</td>
+                    <td>@intellegentWork.Status</td>
+                    <td><a href="/EditIntellegentWork/@intellegentWork.Id" class="btn btn-info">Edit</a></td>
+                    <td><a @onclick="(() => Delete(intellegentWork.Id))" class="btn btn-danger">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<td><a href="/CreateIntellegentWork" class="btn btn-info">+ Create new</a></td>
+
+@if (responseMessage != null)
+{
+    <p>@responseMessage</p>
+}
+
+@code {
+    private IEnumerable<Attendance> intellegentWorks;
+    private string responseMessage { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        intellegentWorks = await httpClient.GetFromJsonAsync<List<IntellegentWork>>
+        ("https://localhost:5001/api/IntellegentWorks");
+    }
+    protected override async Task OnParametersSetAsync()
+    {
+        intellegentWorks = await httpClient.GetFromJsonAsync<List<IntellegentWork>>
+        ("https://localhost:5001/api/IntellegentWorks");
+    }
+    public async Task Delete(Guid Id)
+    {
+        bool confirm = await js.InvokeAsync<bool>("Confirm", "Do you want to delete this?");
+        if (confirm)
+        {
+            var response = await httpClient.DeleteAsync($"https://localhost:5001/api/IntellegentWorks/{Id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                responseMessage = await response.Content.ReadAsStringAsync();
+            }
+        }
+    }
+}

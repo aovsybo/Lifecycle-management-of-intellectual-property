@@ -1,0 +1,71 @@
+﻿@page "/CreateIntellegentWork"
+@using OOPASU.Domain;
+@using Microsoft.Extensions.Logging
+@using Newtonsoft.Json
+@inject IJSRuntime js
+
+<h3>Create</h3>
+
+
+@inject NavigationManager NavigationManager
+@inject HttpClient httpClient
+
+
+<div class="row">
+    <EditForm Model="@intellegentWork" OnValidSubmit="@InsertAccount">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            Title: <InputText id="balance" @bind-Value="intellegentWork.Title" class="form-control" />
+        </div>
+        <div class="form-group">
+            Category: <InputDate id="name" @bind-Value="intellegentWork.Category" class="form-control" />
+        </div>
+        <div class="form-group">
+            Description: <InputDate id="name" @bind-Value="intellegentWork.Description" class="form-control" />
+        </div>
+        <div class="form-group">
+            GRNTI: <InputDate id="name" @bind-Value="intellegentWork.GRNTI" class="form-control" />
+        </div>
+        <div class="form-group">
+            DOI: <InputDate id="name" @bind-Value="intellegentWork.DOI" class="form-control" />
+        </div>
+        <div class="form-group">
+            Place: <InputDate id="name" @bind-Value="intellegentWork.Place" class="form-control" />
+        </div>
+        <div class="form-group">
+            Year: <InputDate id="name" @bind-Value="intellegentWork.Year" class="form-control" />
+        </div>
+        <div class="form-group">
+            Status: <InputDate id="name" @bind-Value="intellegentWork.Status" class="form-control" />
+        </div>
+        
+
+        <br />
+        <button type="submit" class="btn btn-success">Done</button>
+    </EditForm>
+</div>
+
+<br />
+<br />
+
+@if (responseMessage != null)
+{
+    <p>@responseMessage</p>
+}
+
+
+@* <a href="/Accounts">Back to List</a> *@
+@* *@
+@* *@
+@code {
+    private string responseMessage { get; set; }
+    private IntellegentWork intellegentWork = new IntellegentWork();
+
+    private async Task InsertAccount()
+    {
+        var rs = await httpClient.PostAsJsonAsync($"https://localhost:5001/api/IntellegentWorks", intellegentWork);
+        responseMessage = await rs.Content.ReadAsStringAsync();
+    }
+}

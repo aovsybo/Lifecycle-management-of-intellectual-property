@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using OOPASU.Domain;
 using OOPASU.Domain.DTO;
+using OOPASU.Infrastructure.Data;
 
 namespace OOPASU.Infrastructure.Repository
 {
@@ -20,26 +21,18 @@ namespace OOPASU.Infrastructure.Repository
         {
             return await _context.KeyWords.ToListAsync();
         }
-        public async Task<Guid> AddAsync(KeyWordDTO keyWordDTO)
+        public async Task<Guid> AddAsync(KeyWord keyWord)
         {
-            var keyWord = new KeyWord()
-            {
-                Word = keyWordDTO.Word
-
-            };
+            
             _context.KeyWords.Add(keyWord);
             await _context.SaveChangesAsync();
             return keyWord.Id;
         }
-        public async Task<KeyWordOutDTO> GetByIdAsync(Guid id)
+        public async Task<KeyWord> GetByIdAsync(Guid id)
         {
             KeyWord keyWord = await _context.KeyWords.FindAsync(id);
-            KeyWordOutDTO dto = new KeyWordOutDTO()
-            {
-                Id = keyWord.Id,
-                Word = keyWord.Word
-            };
-            return dto;
+            
+            return keyWord;
         }
         public async Task UpdateAsync(KeyWordOutDTO keyWord)
         {

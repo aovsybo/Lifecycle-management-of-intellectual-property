@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OOPASU.Domain;
 using OOPASU.Domain.DTO;
-using OOPASU.Infrastructure;
+using OOPASU.Infrastructure.Data;
 using OOPASU.Infrastructure.Repository;
 
 namespace OOPASU.API.Controllers
@@ -34,7 +34,7 @@ namespace OOPASU.API.Controllers
 
         // GET: api/Publications/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<PublicationOutDTO>> GetPublication(Guid id)
+        public async Task<ActionResult<Publication>> GetPublication(Guid id)
         {
             //var publication = await _context.Publications.FindAsync(id);
             var publication = await _publicationRepository.GetByIdAsync(id);
@@ -42,6 +42,15 @@ namespace OOPASU.API.Controllers
             {
                 return NotFound();
             }
+
+            PublicationOutDTO dto = new PublicationOutDTO()
+            {
+                Id = publication.Id,
+                Publisher = publication.Publisher,
+                UDK = publication.UDK,
+                Editor = publication.Editor,
+                PageNumber = publication.PageNumber
+            };
 
             return publication;
         }
@@ -83,10 +92,19 @@ namespace OOPASU.API.Controllers
         // POST: api/Publications
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<PublicationOutDTO>> PostPublication(PublicationDTO publication)
+        public async Task<ActionResult<PublicationOutDTO>> PostPublication(PublicationDTO publicationDTO)
         {
             //_context.Publications.Add(publication);
             //await _context.SaveChangesAsync();
+
+            var publication = new Publication()
+            {
+                Publisher = publicationDTO.Publisher,
+                UDK = publicationDTO.UDK,
+                Editor = publicationDTO.Editor,
+                PageNumber = publicationDTO.PageNumber
+            };
+
             Guid id = await _publicationRepository.AddAsync(publication);
             return CreatedAtAction("GetPublication", new { id = id }, publication);
         }

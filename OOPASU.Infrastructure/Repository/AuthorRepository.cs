@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using OOPASU.Domain;
 using OOPASU.Domain.DTO;
+using OOPASU.Infrastructure.Data;
 
 namespace OOPASU.Infrastructure.Repository
 {
@@ -20,30 +21,17 @@ namespace OOPASU.Infrastructure.Repository
         {
             return await _context.Authors.ToListAsync();
         }
-        public async Task<Guid> AddAsync(AuthorDTO authorDTO)
+        public async Task<Guid> AddAsync(Author author)
         {
-            var author = new Author()
-            {
-                UserId = authorDTO.UserId,
-                FirstName = authorDTO.FirstName,
-                SecondName = authorDTO.SecondName
-
-            };
             _context.Authors.Add(author);
             await _context.SaveChangesAsync();
             return author.Id;
         }
-        public async Task<AuthorOutDTO> GetByIdAsync(Guid id)
+        public async Task<Author> GetByIdAsync(Guid id)
         {
             Author author = await _context.Authors.FindAsync(id);
-            AuthorOutDTO dto = new AuthorOutDTO()
-            {
-                Id = author.Id,
-                UserId = author.UserId,
-                FirstName = author.FirstName,
-                SecondName = author.SecondName
-            };
-            return dto;
+            
+            return author;
         }
         public async Task UpdateAsync(AuthorOutDTO author)
         {

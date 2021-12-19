@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OOPASU.Domain;
 using OOPASU.Domain.DTO;
-using OOPASU.Infrastructure;
+using OOPASU.Infrastructure.Data;
 using OOPASU.Infrastructure.Repository;
 
 namespace OOPASU.API.Controllers
@@ -43,7 +43,14 @@ namespace OOPASU.API.Controllers
                 return NotFound();
             }
 
-            return indexation;
+            IndexationOutDTO dto = new IndexationOutDTO()
+            {
+                Id = indexation.Id,
+                Type = indexation.Type,
+                Link = indexation.Link
+            };
+
+            return dto;
         }
 
         // PUT: api/Indexations/5
@@ -83,10 +90,15 @@ namespace OOPASU.API.Controllers
         // POST: api/Indexations
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<IndexationOutDTO>> PostIndexation(IndexationDTO indexation)
+        public async Task<ActionResult<IndexationOutDTO>> PostIndexation(IndexationDTO indexationDTO)
         {
             //_context.Indexations.Add(indexation);
             //await _context.SaveChangesAsync();
+            var indexation = new Indexation()
+            {
+                Type = indexationDTO.Type,
+                Link = indexationDTO.Link
+            };
             Guid id = await _indexationRepository.AddAsync(indexation);
             return CreatedAtAction("GetIndexation", new { id = id }, indexation);
         }

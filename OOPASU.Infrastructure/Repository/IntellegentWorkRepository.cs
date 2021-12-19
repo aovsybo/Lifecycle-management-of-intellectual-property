@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using OOPASU.Domain;
 using OOPASU.Domain.DTO;
+using OOPASU.Infrastructure.Data;
 
 namespace OOPASU.Infrastructure.Repository
 {
@@ -20,40 +21,20 @@ namespace OOPASU.Infrastructure.Repository
         {
             return await _context.IntellegentWorks.ToListAsync();
         }
-        public async Task<Guid> AddAsync(IntellegentWorkDTO intellegentWorkDTO)
+        public async Task<Guid> AddAsync(IntellegentWork intellegentWork)
         {
-            var intellegentWork = new IntellegentWork()
-            {
- 
-                Title = intellegentWorkDTO.Title,
-                Category = intellegentWorkDTO.Category,
-                Description = intellegentWorkDTO.Description,
-                GRNTI = intellegentWorkDTO.GRNTI,
-                DOI = intellegentWorkDTO.DOI,
-                Place = intellegentWorkDTO.Place,
-                Year = intellegentWorkDTO.Year,
-                Status = intellegentWorkDTO.Status
-            };
             _context.IntellegentWorks.Add(intellegentWork);
             await _context.SaveChangesAsync();
             return intellegentWork.Id;
         }
-        public async Task<IntellegentWorkOutDTO> GetByIdAsync(Guid id)
+        public async Task<IntellegentWork> GetByIdAsync(Guid id)
         {
+            /*IntellegentWork intellegentWork = await _context.IntellegentWorks.Where(w => w.Id == id)
+                .Include(k => k.KeyWords)
+                .FirstOrDefaultAsync();*/
             IntellegentWork intellegentWork = await _context.IntellegentWorks.FindAsync(id);
-            IntellegentWorkOutDTO dto = new IntellegentWorkOutDTO()
-            {
-                Id = intellegentWork.Id,
-                Title = intellegentWork.Title,
-                Category = intellegentWork.Category,
-                Description = intellegentWork.Description,
-                GRNTI = intellegentWork.GRNTI,
-                DOI = intellegentWork.DOI,
-                Place = intellegentWork.Place,
-                Year = intellegentWork.Year,
-                Status = intellegentWork.Status
-            };
-            return dto;
+
+            return intellegentWork;
         }
         public async Task UpdateAsync(IntellegentWorkOutDTO intellegentWork)
         {
