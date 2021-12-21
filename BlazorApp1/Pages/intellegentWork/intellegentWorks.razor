@@ -11,7 +11,7 @@
 
 <h3>intellegentWork</h3>
 
-@if (intellegentWorks == null)
+@if (intellegentWork == null)
 {
     <p><em>Empty</em></p>
 }
@@ -32,21 +32,21 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var intellegentWork in intellegentWorks)
+            @foreach (var i_intellegentWork in intellegentWork)
             {
                 <tr>
 
-                    <td>@intellegentWork.Id</td>
-                    <td>@intellegentWork.Title</td>
-                    <td>@intellegentWork.Category</td>
-                    <td>@intellegentWork.Description</td>
-                    <td>@intellegentWork.GRNTI</td>
-                    <td>@intellegentWork.DOI</td>
-                    <td>@intellegentWork.Place</td>
-                    <td>@intellegentWork.Year</td>
-                    <td>@intellegentWork.Status</td>
-                    <td><a href="/EditIntellegentWork/@intellegentWork.Id" class="btn btn-info">Edit</a></td>
-                    <td><a @onclick="(() => Delete(intellegentWork.Id))" class="btn btn-danger">Delete</a></td>
+                    <td>@i_intellegentWork.Id</td>
+                    <td>@i_intellegentWork.Title</td>
+                    <td>@i_intellegentWork.Category</td>
+                    <td>@i_intellegentWork.Description</td>
+                    <td>@i_intellegentWork.GRNTI</td>
+                    <td>@i_intellegentWork.DOI</td>
+                    <td>@i_intellegentWork.Place</td>
+                    <td>@i_intellegentWork.Year</td>
+                    <td>@i_intellegentWork.Status</td>
+                    <td><a href="/EditIntellegentWork/@i_intellegentWork.Id" class="btn btn-info">Edit</a></td>
+                    <td><a @onclick="(() => Delete(i_intellegentWork.Id))" class="btn btn-danger">Delete</a></td>
                 </tr>
             }
         </tbody>
@@ -61,29 +61,30 @@ else
 }
 
 @code {
-    private IEnumerable<Attendance> intellegentWorks;
+    private IEnumerable<IntellegentWork> intellegentWork;
     private string responseMessage { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        intellegentWorks = await httpClient.GetFromJsonAsync<List<IntellegentWork>>
-        ("https://localhost:5001/api/IntellegentWorks");
+        intellegentWork = await httpClient.GetFromJsonAsync<List<IntellegentWork>>
+        ("https://localhost:44338/api/IntellegentWorks");
     }
     protected override async Task OnParametersSetAsync()
     {
-        intellegentWorks = await httpClient.GetFromJsonAsync<List<IntellegentWork>>
-        ("https://localhost:5001/api/IntellegentWorks");
+        intellegentWork = await httpClient.GetFromJsonAsync<List<IntellegentWork>>
+        ("https://localhost:44338/api/IntellegentWorks");
     }
     public async Task Delete(Guid Id)
     {
-        bool confirm = await js.InvokeAsync<bool>("Confirm", "Do you want to delete this?");
-        if (confirm)
-        {
-            var response = await httpClient.DeleteAsync($"https://localhost:5001/api/IntellegentWorks/{Id}");
+        var response = await httpClient.DeleteAsync($"https://localhost:44338/api/IntellegentWorks/{Id}");
 
             if (response.IsSuccessStatusCode)
             {
                 responseMessage = await response.Content.ReadAsStringAsync();
             }
-        }
+        /*bool confirm = await js.InvokeAsync<bool>("Confirm", "Do you want to delete this?");
+        if (confirm)
+        {
+            
+        }*/
     }
 }

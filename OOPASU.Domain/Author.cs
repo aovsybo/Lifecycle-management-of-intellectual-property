@@ -12,6 +12,7 @@ namespace OOPASU.Domain
         public int UserId { get; set; }
         public string FirstName { get; set; }
         public string SecondName { get; set; }
+        public string PatronymicName { get; set; }
 
         //Свойства навигации
         public Guid IntellegentWorkId { get; set; }

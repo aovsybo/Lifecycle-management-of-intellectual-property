@@ -20,25 +20,25 @@
             Title: <InputText id="balance" @bind-Value="intellegentWork.Title" class="form-control" />
         </div>
         <div class="form-group">
-            Category: <InputDate id="name" @bind-Value="intellegentWork.Category" class="form-control" />
+            Category: <InputText id="name" @bind-Value="intellegentWork.Category" class="form-control" />
         </div>
         <div class="form-group">
-            Description: <InputDate id="name" @bind-Value="intellegentWork.Description" class="form-control" />
+            Description: <InputText id="name" @bind-Value="intellegentWork.Description" class="form-control" />
         </div>
         <div class="form-group">
-            GRNTI: <InputDate id="name" @bind-Value="intellegentWork.GRNTI" class="form-control" />
+            GRNTI: <InputText id="name" @bind-Value="intellegentWork.GRNTI" class="form-control" />
         </div>
         <div class="form-group">
-            DOI: <InputDate id="name" @bind-Value="intellegentWork.DOI" class="form-control" />
+            DOI: <InputText id="name" @bind-Value="intellegentWork.DOI" class="form-control" />
         </div>
         <div class="form-group">
-            Place: <InputDate id="name" @bind-Value="intellegentWork.Place" class="form-control" />
+            Place: <InputText id="name" @bind-Value="intellegentWork.Place" class="form-control" />
         </div>
         <div class="form-group">
-            Year: <InputDate id="name" @bind-Value="intellegentWork.Year" class="form-control" />
+            Year: <InputNumber id="name" @bind-Value="intellegentWork.Year" class="form-control" />
         </div>
         <div class="form-group">
-            Status: <InputDate id="name" @bind-Value="intellegentWork.Status" class="form-control" />
+            Status: <InputText id="name" @bind-Value="intellegentWork.Status" class="form-control" />
         </div>
 
         <br />
@@ -64,12 +64,12 @@
     public string LessonId { get; set; }
 
     private string responseMessage { get; set; }
-    private Attendance attendance = new Attendance();
+    private IntellegentWork intellegentWork = new IntellegentWork();
 
     protected override async Task OnInitializedAsync()
     {
         var _intWork = await httpClient.GetFromJsonAsync<IntellegentWork>
-            ($"https://localhost:5001/api/IntellegentWorks/{stId}");
+            ($"https://localhost:44338/api/IntellegentWorks/{stId}");
         intellegentWork.Id = _intWork.Id;
         intellegentWork.Title = _intWork.Title;
         intellegentWork.Category = _intWork.Category;
@@ -82,7 +82,7 @@
     }
     private async Task InsertAccount()
     {
-        var rs = await httpClient.PutAsJsonAsync($"https://localhost:5001/api/IntellegentWorks/{stId}", intellegentWork);
+        var rs = await httpClient.PutAsJsonAsync($"https://localhost:44338/api/IntellegentWorks/{stId}", intellegentWork);
         if (rs.IsSuccessStatusCode)
         {
             responseMessage = await rs.Content.ReadAsStringAsync();

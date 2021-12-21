@@ -48,7 +48,8 @@ namespace OOPASU.API.Controllers
                 Id = author.Id,
                 UserId = author.UserId,
                 FirstName = author.FirstName,
-                SecondName = author.SecondName
+                SecondName = author.SecondName,
+                PatronymicName = author.PatronymicName
             };
 
             return dto;
@@ -100,7 +101,8 @@ namespace OOPASU.API.Controllers
             {
                 UserId = authorDTO.UserId,
                 FirstName = authorDTO.FirstName,
-                SecondName = authorDTO.SecondName
+                SecondName = authorDTO.SecondName,
+                PatronymicName = authorDTO.PatronymicName
 
             };
 

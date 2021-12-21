@@ -8,7 +8,6 @@ namespace OOPASU.Domain
 {
     public class Book : Publication
     {
-        public Guid Id { get; set; }
         public string Organisation { get; set; }
         public int Level { get; set; }
         //Свойства навигации

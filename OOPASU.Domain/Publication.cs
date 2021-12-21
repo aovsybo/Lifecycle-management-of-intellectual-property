@@ -8,7 +8,6 @@ namespace OOPASU.Domain
 {
     public class Publication : IntellegentWork
     {
-        public Guid Id { get; set; }
         public string Publisher { get; set; }
         public string UDK { get; set; }
         public string Editor { get; set; }

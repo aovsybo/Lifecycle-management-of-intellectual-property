@@ -9,7 +9,6 @@ namespace OOPASU.Domain
 {
     public class Article : Publication
     {
-        public Guid Id { get; set; }
         public string CollectionName { get; set; }
         public int CollectionNumber { get; set; }
         public int CollectionPart { get; set; }

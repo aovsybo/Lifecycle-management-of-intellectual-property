@@ -11,5 +11,7 @@ namespace OOPASU.Domain.DTO
         public int UserId { get; set; }
         public string FirstName { get; set; }
         public string SecondName { get; set; }
+        public string PatronymicName { get; set; }
+
     }
 }
